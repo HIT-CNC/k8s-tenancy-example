@@ -73,10 +73,6 @@ Error from server (Forbidden): User "tenant-a-developer-1" cannot list pods in t
 ```
 
 
-## Create ClusterRole, ClusterRoleBinding
-
-See example in `clusterrole.yaml`
-
 ## Create Namespace,Role,RoleBinding
 
 See example in `tenant.yaml`

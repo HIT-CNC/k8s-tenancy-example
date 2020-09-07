@@ -1,0 +1,65 @@
+# Namaspace definition
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: tenant-a
+  labels:
+    name: tenant-a
+
+# Roles definition in the Namespace
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: tenant-a
+  name: admin
+rules:
+- apiGroups: [""] # "" indicates the core API group
+  resources: ["*"]
+  verbs: ["*"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: tenant-a
+  name: pod-service-editor
+rules:
+- apiGroups: [""] 
+  resources: ["pods","services"]
+  verbs: ["*"]
+
+# Rolebindings in the Namespace
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: tenant-a-admin
+  namespace: tenant-a
+subjects:
+# You can specify more than one "subject"
+- kind: User
+  name: tenant-a-admin # "name" is case sensitive
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  # "roleRef" specifies the binding to a Role / ClusterRole
+  kind: Role #this must be Role or ClusterRole
+  name: admin # this must match the name of the Role or ClusterRole you wish to bind to
+  apiGroup: rbac.authorization.k8s.io
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: tenant-a-developer
+  namespace: tenant-a
+subjects:
+# You can specify more than one "subject"
+- kind: User
+  name: tenant-a-developer-1 # "name" is case sensitive
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role 
+  name: pod-service-editor 
+  apiGroup: rbac.authorization.k8s.io
